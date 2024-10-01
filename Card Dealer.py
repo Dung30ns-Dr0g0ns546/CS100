@@ -9,12 +9,42 @@
 # 	Show cards in computer hand via showHand()
 
 
+# initCard()
+#    No parameters
+#    Create an empty list called cardDB
+#    Assign 52 entries, all zero
+#    Return cardDB
 
-# initCard [create list, indices 0-51, values all = 0, return cardDB]
-# showDB [takes cardDB as parameter, for each element in cardDB (Print id, location noe, convert id to card name, convert location with HANDS later), no return value is needed]
-# getCardName [not in main, takes cardID as parameter, uses // and % to get rank and suit IDS, uses RANKNAME and SUITNAME, ]
-# assignCard [takes cardDB and hand as parameters, get random cardID 0-51, assign hand to that card, no return value is needed]
-# showHand [takes cardDB and hand as parameters, go through cardDB (if location is hand = print card name), No return value is needed]
+
+# assignCard()
+#	Parameters: cardDB, hand
+#	Pick a random number (0 - 51)
+#	Assign hand to that numbers location
+#	(how do we make sure same card isn’t chosen twice?)
+#	No return value needed
+
+# showDB()
+#	Parameter: cardDB
+#	Step through all cards
+#	Print card number
+#	Print card number
+#	Print card location
+#	No return value
+
+
+# showHand()
+#	Parameter: cardDB, hand
+#	Step through all card
+#		If card is in hand
+#			Print card name
+#	No return value
+
+
+# getCardName()
+#	Parameter: cardnum
+#	Interger divide cardNum by 13 -> suit
+#	Modulus of cardNum and 13 -> rank
+#	Use SUITNAME and RANKNAME tuples to get a string name
 
 
 
