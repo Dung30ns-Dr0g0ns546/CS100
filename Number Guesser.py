@@ -27,6 +27,6 @@ while (keepGoing):
     if guess == randomNumber:
         print(f"Good Job! You guessed the number in {tries} tries! You won!")
         keepGoing = False
-    if tries >= 7:
+    else:
         print("You were't able to guess the number in 7 tries or less. You lose, you fool...")
         keepGoing = False
