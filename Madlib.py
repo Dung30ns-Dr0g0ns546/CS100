@@ -7,4 +7,4 @@ color3 = input ("Choose one more color: ")
 adjective1 = input ("Choose an adjective: ")
 adjective2 = input ("Choose another adjective: ")
 
-print ("One " + adjectove1 + color1 + animal + "went down to the " + color2 + "store and met up with a " + adjective2 + color3 + animal2
+print ("One " + adjective1 + color1 + animal + "went down to the " + color2 + "store and met up with a " + adjective2 + color3 + animal2)
