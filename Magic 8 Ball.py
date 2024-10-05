@@ -35,3 +35,9 @@ if choice == "1":
     print()
 
 elif choice == "2":
+    print("What number do you want? (0-8)")
+    for I, value in enumerate(fortune):
+    print(random.randint(0, 8))
+
+else:
+    question = input("Your question: ")
