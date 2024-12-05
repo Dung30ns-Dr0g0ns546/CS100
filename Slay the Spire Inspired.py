@@ -1,5 +1,7 @@
 import pygame, simpleGE, random
 
+NUMCARD = 20
+
 DECK = 0
 HAND = 1
 DISCARD = 2
@@ -24,11 +26,11 @@ class Game(simpleGE.Scene):
 class CardSlot(simpleGE.Sprite):
     def __init__(self, scene):
         super().__init__(scene)
-        self.setImage("abstract.png")
+        self.setImage("abstract_clouds.png")
         
     def process(self):        
         if self.clicked:
-            cardNum = random.randrange(NUMCARDS)
+            cardNum = random.randrange(DECK)
             currentCard = self.scene.cards[cardNum]
             self.copyImage(currentCard.image)
 
@@ -49,7 +51,18 @@ class Character(object):
     def apply(self, card):
         self.hp -= card.damage
         self.shield += card.shield
-                
+
+class lblHealth(simpleGE.Label):
+    def __init__(self):
+        super().__init__()
+        self.text = "Score: 0"
+        self.center = (100, 30)
+
+class LblTime(simpleGE.Label):
+      def __init__(self):
+        super().__init__()
+        self.text = "Time left: 10"
+        self.center = (500, 30)                
 class Card(object):
     def __init__(self, name, damage, shield):
         self.name = name
@@ -84,9 +97,13 @@ class Healer(Card):
     def __init__(self):
         super().__init__("Healer", -2, 0)
 
-class Curse(Card):
+class Witch(Card):
     def __init__(self):
-        super().__init__("Healer", -2, 0)
+        super().__init__("Witch", -1, 0)
+
+class Archer(Card):
+    def __init__(self):
+        super().__init__("Archer", 2, 1)
         
 class Deck(object):
     def __init__(self):
@@ -95,11 +112,10 @@ class Deck(object):
         
     def setDefaultDeck(self):
         self.cards.append(Fighter())
-        self.cards.append(Fighter())
-        self.cards.append(Fighter())
-        self.cards.append(ShieldBearer())
         self.cards.append(ShieldBearer())
         self.cards.append(Healer())
+        self.cards.append(Fighter())
+        self.cards.append(ShieldBearer())
         
     def showDeck(self):
         for card in self.cards:
