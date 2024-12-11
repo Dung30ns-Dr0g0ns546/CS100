@@ -8,32 +8,6 @@ DISCARD = 2
 
 STATES = ("deck", "hand", "discard")
 
-class Game(simpleGE.Scene):
-    def __init__(self):
-        super().__init__()
-        self.cardSlot = CardSlot(self)
-        self.cardSlot.position = (320, 240)
-        
-        self.setupCards()
-        
-        self.sprites = [self.cardSlot]
-        
-    def setupCards(self):
-        self.cards = []
-        for cn in range(NUMCARDS):
-            self.cards.append(Card(cn))
-
-class CardSlot(simpleGE.Sprite):
-    def __init__(self, scene):
-        super().__init__(scene)
-        self.setImage("abstract_clouds.png")
-        
-    def process(self):        
-        if self.clicked:
-            cardNum = random.randrange(DECK)
-            currentCard = self.scene.cards[cardNum]
-            self.copyImage(currentCard.image)
-
 class Character(object):
     def __init__(self, name, hp):
         super().__init__()
@@ -52,17 +26,6 @@ class Character(object):
         self.hp -= card.damage
         self.shield += card.shield
 
-class lblHealth(simpleGE.Label):
-    def __init__(self):
-        super().__init__()
-        self.text = "Score: 0"
-        self.center = (100, 30)
-
-class LblTime(simpleGE.Label):
-      def __init__(self):
-        super().__init__()
-        self.text = "Time left: 10"
-        self.center = (500, 30)                
 class Card(object):
     def __init__(self, name, damage, shield):
         self.name = name
@@ -84,6 +47,33 @@ class Card(object):
     def displayShort(self):
         location = STATES[self.state]
         print(f"{self.name:15} ({location:^7}) D: {self.damage:<3} S: {self.shield}")
+
+class Dice(simpleGE.Sprite):
+    def __init__(self, scene):
+        super().__init__(scene)
+        self.setImage("Dice Faces/dice-six-faces-one.svg")
+        self.setSize(50, 50)
+        
+        self.images = [None,
+                       pygame.image.load("Dice Faces/dice-six-faces-one.svg"),
+                       pygame.image.load("Dice Faces/dice-six-faces-two.svg"),
+                       pygame.image.load("Dice Faces/dice-six-faces-three.svg"),
+                       pygame.image.load("Dice Faces/dice-six-faces-four.svg"),
+                       pygame.image.load("Dice Faces/dice-six-faces-five.svg"),
+                       pygame.image.load("Dice Faces/dice-six-faces-six.svg"),
+                       ]
+        for i in range(1, 7):
+            self.images[i] = pygame.transform.scale(self.images[i], (50, 50))
+                    
+    def roll(self):
+        self.value = random.randint(1, 6)
+        self.copyImage(self.images[self.value])
+        if self.value == 3:
+            self.nRoll = 2
+        elif self.value == 5:
+            self.nRoll = 4
+        else:
+            self.nRoll = 0
         
 class Fighter(Card):
     def __init__(self):
@@ -172,6 +162,63 @@ class Deck(object):
                 if currentCard.state == DECK:
                     currentCard.state = HAND
                     keepGoing = False
+                    
+class Game(simpleGE.Scene):
+    def __init__(self):
+        super().__init__()
+        self.setImage("forest.jpg")
+        
+        self.sndRoll = simpleGE.Sound("demos_petals_diceRoll.wav")
+        pygame.mixer.music.load("demos_petals_bgm.mp3")
+        pygame.mixer.music.set_volume(.1)
+        pygame.mixer.music.play(-1)
+        
+        self.lblName1 = simpleGE.Label()
+        self.lblName1.text = "Name 1"
+        self.lblName1.center = (80, 100)
+        
+        self.lblName2 = simpleGE.Label()
+        self.lblName2.text = "Name 2"
+        self.lblName2.center = (540, 100)
+        
+        self.lblHP1 = simpleGE.Label()
+        self.lblHP1.text = "Hit Points 1"
+        self.lblHP1.center = (80, 150)
+        
+        self.lblHP2 = simpleGE.Label()
+        self.lblHP2.text = "Hit Points 2"
+        self.lblHP2.center = (540, 150)
+        
+        self.btnRoll = simpleGE.Button()
+        self.btnRoll.text = "Roll"
+        self.btnRoll.center = (320,200)
+        
+        self.btnAttack = simpleGE.Button()
+        self.btnAttack.text = "Attack"
+        self.btnAttack.center = (320, 400)
+        
+        self.sprites = [self.lblName1,
+                        self.lblName2,
+                        self.lblHP1,
+                        self.lblHP2,
+                        self.btnRoll,
+                        self.btnAttack]
+        
+    def process(self):
+        if self.btnRoll.clicked:
+            self.rollAll()
+        
+    def rollAll(self):
+        self.sndRoll.play()
+        for die in self.dice:
+            die.roll()
+            rollNumber += die.nRoll
+            
+        self.lblResult.text = f"You rolled a {rollNumber}"
+        
+        if self.lblResult.center[0] >= 0:
+            self.lblResult.hide()
+                
 
 def main():
     game = Game()
